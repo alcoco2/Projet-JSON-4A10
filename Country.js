@@ -1,5 +1,5 @@
 class Country {
-    static all_countries = new Map();
+    static all_countries = new Array();
     constructor(nom, codeAlpha3, population, tld, drapeau, gentilé, superficie, capitale, paysFrontaliers) {
       this.nom = nom;
       this.codeAlpha3 = codeAlpha3;
@@ -10,7 +10,7 @@ class Country {
       this.superficie= superficie;
       this.capitale = capitale;
       this.paysFrontaliers = paysFrontaliers;
-      Country.all_countries.set(codeAlpha3, this);
+      Country.all_countries.push(codeAlpha3, this);
     }
 
     /**
@@ -82,7 +82,6 @@ function fill_db() {
             }
         }
 
-
         // Création de languages
         let languages = Language.all_languages;
         if (country.languages) {
@@ -94,8 +93,8 @@ function fill_db() {
             }
         }
 
-        console.log("Classes et données chargées ....")
     }
+    console.log("Classes et données chargées ....")
 }
 
 fill_db()
