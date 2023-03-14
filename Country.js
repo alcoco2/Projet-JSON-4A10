@@ -10,7 +10,7 @@ class Country {
       this.superficie= superficie;
       this.capitale = capitale;
       this.paysFrontaliers = paysFrontaliers;
-      Country.all_countries.push(codeAlpha3, this);
+      Country.all_countries.push({codeAlpha3: this});
     }
 
     /**
@@ -98,5 +98,3 @@ function fill_db() {
 }
 
 fill_db()
-
-console.log(Language.all_languages)
