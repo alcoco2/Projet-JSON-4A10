@@ -5,7 +5,7 @@ const countries = Country.all_countries;
 function withCommonLanguage(languages) {
     const countriesWithLanguage = [];
     
-    for (const country of Country.all_countries) {
+    for (const country of countries) {
         const neighbors = country.getBorders();
         const commonLanguage = neighbors.some(neighbor => {
             return neighbor.languages.some(lang => languages.includes(lang.iso639_1));
@@ -26,7 +26,7 @@ function withoutCommonCurrency() {
     const countriesWithoutCurrency = [];
     
     for (const country of countries) {
-        console.log(country)
+        console.log(country.codeAlpha3.getBorders())
         const neighbors = country.getBorders();
         const currencies = country.currencies.map(currency => currency.code);
         const commonCurrency = neighbors.some(neighbor => {

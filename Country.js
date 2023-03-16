@@ -40,7 +40,7 @@ class Country {
         let tabPaysFrontalier = []
         if (this.paysFrontaliers){
             for(let frontalier of this.paysFrontaliers){
-                for(let pays of this.all_countries){
+                for(let pays of Country.all_countries){
                     if (frontalier == pays["alpha3Code"]) {
                         tabPaysFrontalier.push(pays)
                     }
