@@ -41,7 +41,7 @@ class Country {
         if (this.paysFrontaliers){
             for(let frontalier of this.paysFrontaliers){
                 let tabrecup = Country.all_countries.filter(pays => pays.codeAlpha3.codeAlpha3 == frontalier);
-                tabPaysFrontalier.push(tabrecup);
+                tabPaysFrontalier.push(tabrecup[0]);
             }
         } 
         return tabPaysFrontalier;
