@@ -78,7 +78,6 @@ class Country {
                 currenciesOfThis.push(tabCurrencie[0].code);
             }
         } 
-        
         return currenciesOfThis
       }
   
