@@ -2,34 +2,56 @@ const countries = Country.all_countries;
 /**
  * Pays ayant au moins un voisin parlant l’une des es langues. A chez aussi les pays voisins et les langues en question.
  */
-function withCommonLanguage() {
+function withCommonLanguage(languages) {
+    const countriesWithLanguage = [];
     
+    for (const country of Country.all_countries) {
+        const neighbors = country.getBorders();
+        const commonLanguage = neighbors.some(neighbor => {
+            return neighbor.languages.some(lang => languages.includes(lang.iso639_1));
+        });
+      
+        if (commonLanguage) {
+            countriesWithLanguage.push(country);
+        }
+    }
+    
+    return countriesWithLanguage;
 }
 
 /**
  * Pays sans aucun voisin ayant au moins une de ses monnaies.
  */
 function withoutCommonCurrency() {
+    const countriesWithoutCurrency = [];
+    
+    for (const country of countries) {
+        console.log(country)
+        const neighbors = country.getBorders();
+        const currencies = country.currencies.map(currency => currency.code);
+        const commonCurrency = neighbors.some(neighbor => {
+        return neighbor.currencies.some(currency => currencies.includes(currency.code));
+    });
+      
+      if (!commonCurrency) {
+            countriesWithoutCurrency.push(country);
+        }
+    }
+    
+    return countriesWithoutCurrency;
 }
-
+withoutCommonCurrency()
 /**
  * Pays triés par ordre décroissant de densité de population.
 */
 function sortingDecreasingDensity() {
-    console.log(countries[1].codeAlpha3)
-    // Trier les pays par densité de population décroissante
-    // let sortCountriesDensity = countries.sort();
-  
-    // Afficher la liste triée
-    // console.log(sortCountries)
-    // for (let i = 0; i < countries.length; i++) {
-    //     console.log(countries[i].name + ' - ' + countries[i].population_density + ' habitants/km²');
-    // }
-    
+    const countries = Country.all_countries;
+    countries.sort((a, b) => {
+      return b.getPopDensity() - a.getPopDensity();
+    });
+    return countries;
 }
-
-sortingDecreasingDensity()
-
+  
 /**
  * Pays ayant plusieurs Top Level Domains Internet. 
  */
@@ -41,7 +63,7 @@ function moreTopLevelDomains() {
             countryMoreTDL.push(country.codeAlpha3);
         }
     }
-    console.log(countryMoreTDL)
+    return countryMoreTDL
 }
 
 // Q9 - veryLongTrip(nom_pays) : En partant d’un pays donné (représenté ici par l’argument nom_pays),listez tous les pays que l’on peut visiter en passant de l’un à l’autre. 
