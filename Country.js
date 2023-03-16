@@ -37,14 +37,11 @@ class Country {
      * @returns {Array} 
      */
     getBorders(){
-        let tabPaysFrontalier = []
+        let tabPaysFrontalier= []
         if (this.paysFrontaliers){
             for(let frontalier of this.paysFrontaliers){
-                for(let pays of Country.all_countries){
-                    if (frontalier == pays["alpha3Code"]) {
-                        tabPaysFrontalier.push(pays)
-                    }
-                }
+                let tabrecup = Country.all_countries.filter(pays => pays.codeAlpha3.codeAlpha3 == frontalier);
+                tabPaysFrontalier.push(tabrecup);
             }
         } 
         return tabPaysFrontalier;

@@ -26,6 +26,7 @@ function withoutCommonCurrency() {
     const countriesWithoutCurrency = [];
     
     for (const country of countries) {
+        console.log(country)
         console.log(country.codeAlpha3.getBorders())
         const neighbors = country.getBorders();
         const currencies = country.currencies.map(currency => currency.code);
