@@ -13,15 +13,6 @@ class Currency {
     toString() {
       return `${this.code}`;
     }
-
-    /**
-     * Retourne toutes les monnaies sous forme de liste d'objet
-     * 
-     * @returns {Array} 
-     */
-    getCurrencies() {
-      return Language.all_currencies.Array((currencyCode) => all_currencies[currencyCode]);
-    }
   }
 
   

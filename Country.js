@@ -1,6 +1,6 @@
 class Country {
     static all_countries = new Array();
-    constructor(nom, codeAlpha3, population, tld, drapeau, gentilé, superficie, capitale, paysFrontaliers) {
+    constructor(nom, codeAlpha3, population, tld, drapeau, gentilé, superficie, capitale, paysFrontaliers, currencies, languages) {
       this.nom = nom;
       this.codeAlpha3 = codeAlpha3;
       this.population = population;
@@ -10,6 +10,8 @@ class Country {
       this.superficie= superficie;
       this.capitale = capitale;
       this.paysFrontaliers = paysFrontaliers;
+      this.currencies = currencies;
+      this.languages= languages;
       Country.all_countries.push({codeAlpha3: this});
     }
 
@@ -46,6 +48,39 @@ class Country {
         } 
         return tabPaysFrontalier;
     }
+
+    /**
+     * Retourne toutes les langues sous forme de liste d'Objet
+     * 
+     * @returns {Array}
+     */
+    getLanguages() {
+        let languagesOfThis = []
+        if (this.languages.length){
+            for(let langue of this.languages){
+                let tabLang = Language.all_languages.filter(lang => lang.iso639_2.iso639_2 == langue.iso639_2);
+                languagesOfThis.push(tabLang[0].iso639_2);
+            }
+        } 
+        return languagesOfThis
+    }
+
+    /**
+     * Retourne toutes les monnaies sous forme de liste d'objet
+     * 
+     * @returns {Array} 
+     */
+    getCurrencies() {
+        let currenciesOfThis = []
+        if (this.currencies.length){
+            for(let currency of this.currencies){
+                let tabCurrencie = Currency.all_currencies.filter(curr => curr.code.code == currency.code);
+                currenciesOfThis.push(tabCurrencie[0].code);
+            }
+        } 
+        
+        return currenciesOfThis
+      }
   
 }
 
@@ -65,7 +100,9 @@ function fill_db() {
             country["demonym"], 
             country["area"], 
             country["capital"], 
-            country["borders"]
+            country["borders"],
+            country["currencies"],
+            country["languages"]
         );
         
         // Création de monnaies

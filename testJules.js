@@ -2,59 +2,73 @@ const countries = Country.all_countries;
 /**
  * Pays ayant au moins un voisin parlant l’une des es langues. A chez aussi les pays voisins et les langues en question.
  */
-function withCommonLanguage(languages) {
-    const countriesWithLanguage = [];
+function withCommonLanguage() {
+    let countriesWithLanguage = [];
     
-    for (const country of countries) {
-        const neighbors = country.getBorders();
-        const commonLanguage = neighbors.some(neighbor => {
-            return neighbor.languages.some(lang => languages.includes(lang.iso639_1));
-        });
+    for (let country of countries) {
+        console.log(country.codeAlpha3.getCurrencies())
+        if (country.codeAlpha3.paysFrontaliers.length) {
+            let neighbors = country.codeAlpha3.getBorders();
+            // console.log(Language.all_languages[0])
+            let countryLanguages = Language.all_languages.filter(lang => lang == "francais")
+            let commonLanguage = neighbors.some(neighbor => {
+                return neighbor.languages.some(lang => languages.includes(lang.iso639_1));
+            });
       
-        if (commonLanguage) {
-            countriesWithLanguage.push(country);
+            if (commonLanguage) {
+                countriesWithLanguage.push(country);
+            }
         }
     }
-    
     return countriesWithLanguage;
 }
+withCommonLanguage()
 
 /**
  * Pays sans aucun voisin ayant au moins une de ses monnaies.
  */
 function withoutCommonCurrency() {
-    const countriesWithoutCurrency = [];
+    let countriesWithoutCurrency = [];
     
-    for (const country of countries) {
-        console.log(country)
-        console.log(country.codeAlpha3.getBorders())
-        const neighbors = country.getBorders();
-        const currencies = country.currencies.map(currency => currency.code);
-        const commonCurrency = neighbors.some(neighbor => {
-        return neighbor.currencies.some(currency => currencies.includes(currency.code));
-    });
-      
-      if (!commonCurrency) {
+    for (let country of countries) {
+        if (country.codeAlpha3.paysFrontaliers.length) {
+            let neighbors = country.codeAlpha3.getBorders();
+            for (let currencyTest of Currency.all_currencies) {
+                // console.log("CURRENCY CODE : " +  currencyTest.code.code + " //// COUNTRY CODE : " + country.codeAlpha3.codeAlpha3);
+                console.log(currencyTest)
+                if (currencyTest.code.code == country.codeAlpha3.codeAlpha3) {
+                    console.log("On en a un : " + currencyTest.code.code + country.codeAlpha3.codeAlpha3)
+                }
+            }
+
+            let currencies = Currency.all_currencies.filter(currency => currency.code.code == country.codeAlpha3.codeAlpha3)
+        
+            let commonCurrency = neighbors.some(neighbor => {
+                return neighbor.currencies.some(currency => currencies.includes(currency.code));});
+            
+            if (!commonCurrency) {
             countriesWithoutCurrency.push(country);
+        }
         }
     }
     
     return countriesWithoutCurrency;
 }
-withoutCommonCurrency()
+
 /**
- * Pays triés par ordre décroissant de densité de population.
+ * Pays triés par ordre décroissant de densité de population. bi-check
 */
 function sortingDecreasingDensity() {
-    const countries = Country.all_countries;
-    countries.sort((a, b) => {
-      return b.getPopDensity() - a.getPopDensity();
+    let sortCountries = Country.all_countries;
+    sortCountries.sort((a, b) => {
+      return b.codeAlpha3.getPopDensity() - a.codeAlpha3.getPopDensity();
     });
-    return countries;
+    console.log(sortCountries)
+    return sortCountries;
 }
-  
+
 /**
- * Pays ayant plusieurs Top Level Domains Internet. 
+ * Pays ayant plusieurs Top Level Domains Internet. bi-check
  */
 function moreTopLevelDomains() {
     let countryMoreTDL = [];
