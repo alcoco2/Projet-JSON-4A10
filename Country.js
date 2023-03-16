@@ -1,6 +1,6 @@
 class Country {
     static all_countries = new Array();
-    constructor(nom, codeAlpha3, population, tld, drapeau, gentilé, superficie, capitale, paysFrontaliers, currencies, languages) {
+    constructor(nom, codeAlpha3, population, tld, drapeau, gentilé, superficie, capitale, continent, paysFrontaliers, currencies, languages) {
       this.nom = nom;
       this.codeAlpha3 = codeAlpha3;
       this.population = population;
@@ -9,6 +9,7 @@ class Country {
       this.gentilé = gentilé;
       this.superficie= superficie;
       this.capitale = capitale;
+      this.continent = continent;
       this.paysFrontaliers = paysFrontaliers;
       this.currencies = currencies;
       this.languages= languages;
@@ -99,6 +100,7 @@ function fill_db() {
             country["demonym"], 
             country["area"], 
             country["capital"], 
+            country["region"],
             country["borders"],
             country["currencies"],
             country["languages"]
