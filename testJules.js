@@ -6,53 +6,44 @@ function withCommonLanguage() {
     let countriesWithLanguage = [];
     
     for (let country of countries) {
-        console.log(country.codeAlpha3.getCurrencies())
-        if (country.codeAlpha3.paysFrontaliers.length) {
-            let neighbors = country.codeAlpha3.getBorders();
-            // console.log(Language.all_languages[0])
-            let countryLanguages = Language.all_languages.filter(lang => lang == "francais")
-            let commonLanguage = neighbors.some(neighbor => {
-                return neighbor.languages.some(lang => languages.includes(lang.iso639_1));
-            });
-      
-            if (commonLanguage) {
-                countriesWithLanguage.push(country);
-            }
-        }
-    }
-    return countriesWithLanguage;
-}
-withCommonLanguage()
-
-/**
- * Pays sans aucun voisin ayant au moins une de ses monnaies.
- */
-function withoutCommonCurrency() {
-    let countriesWithoutCurrency = [];
-    
-    for (let country of countries) {
-        if (country.codeAlpha3.paysFrontaliers.length) {
-            let neighbors = country.codeAlpha3.getBorders();
-            for (let currencyTest of Currency.all_currencies) {
-                // console.log("CURRENCY CODE : " +  currencyTest.code.code + " //// COUNTRY CODE : " + country.codeAlpha3.codeAlpha3);
-                console.log(currencyTest)
-                if (currencyTest.code.code == country.codeAlpha3.codeAlpha3) {
-                    console.log("On en a un : " + currencyTest.code.code + country.codeAlpha3.codeAlpha3)
+        for (let neighbor of country.codeAlpha3.getBorders()) {
+            if (neighbor.codeAlpha3.languages.length) {
+                for (let langue of neighbor.codeAlpha3.languages) {
+                    let commonLanguage = country.codeAlpha3.getLanguages().filter(lang => lang.iso639_2 == langue.iso639_2)
+                    if (commonLanguage) {
+                        countriesWithLanguage.push(country);
+                    }
                 }
             }
-
-            let currencies = Currency.all_currencies.filter(currency => currency.code.code == country.codeAlpha3.codeAlpha3)
-        
-            let commonCurrency = neighbors.some(neighbor => {
-                return neighbor.currencies.some(currency => currencies.includes(currency.code));});
-            
-            if (!commonCurrency) {
-            countriesWithoutCurrency.push(country);
-        }
         }
     }
+
+    return countriesWithLanguage.filter((x, i) => countriesWithLanguage.indexOf(x) === i);
+}
+console.log(withCommonLanguage())
+
+/**
+ * Pays sans aucun voisin ayant au moins une de ses monnaies. bi-check
+ */
+function withoutCommonCurrency() {
+    let countriesWithSameCurrency = [];
     
-    return countriesWithoutCurrency;
+    for (let country of countries) {
+        let tabCommonCurrency = []
+        for (let neighbor of country.codeAlpha3.getBorders()) {
+            if (neighbor.codeAlpha3.currencies.length) {
+                for (let cuurency of neighbor.codeAlpha3.currencies) {
+                    let commonCurrency = country.codeAlpha3.getCurrencies().filter(curr => curr.code !== cuurency.code)
+                    tabCommonCurrency.push(commonCurrency)
+                }
+            }
+        }
+        if (!tabCommonCurrency.length) {
+            countriesWithSameCurrency.push(country);
+        }
+    }
+
+    return countriesWithSameCurrency.filter((x, i) => countriesWithSameCurrency.indexOf(x) === i);
 }
 
 /**
