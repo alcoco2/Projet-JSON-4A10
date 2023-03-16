@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        table, th, td {border: 1px solid black}
-    </style>
-    <title>Document</title>
+    <script src="countries.js"></script>
+    <title>Countries V1</title>
 </head>
 <body>
     <table>
@@ -21,17 +19,47 @@
                 <th>Drapeau</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td>test</td>
-                <td>test</td>
-                <td>test</td>
-                <td>test</td>
-                <td>test</td>
-                <td>test</td>
-            </tr>
+        <tbody id="table-body">
         </tbody>
     </table>
-    
-</body>
+    <script>
+        // récupérer le corps de la table
+        let tableBody = document.getElementById('table-body');
+
+        // parcourir le tableau de pays
+        for (let country of countries) {
+            // créer un nouvel élément de ligne de tableau
+            let tr = document.createElement('tr');
+
+            // créer les cellules de la ligne
+            let nameTd = document.createElement('td');
+            nameTd.textContent = country.translations.fr;
+            let populationTd = document.createElement('td');
+            populationTd.textContent = country.population;
+            let areaTd = document.createElement('td');
+            areaTd.textContent = country.area;
+            let densityTd = document.createElement('td');
+            densityTd.textContent = (country.population / country.area).toFixed(2);
+            let regionTd = document.createElement('td');
+            regionTd.textContent = country.region;
+            let flagTd = document.createElement('td');
+            let flagImg = document.createElement('img');
+            flagImg.src = country.flag;
+            flagImg.alt = country.name;
+            flagImg.width = 50;
+            flagTd.appendChild(flagImg);
+
+            // ajouter les cellules à la ligne
+            tr.appendChild(nameTd);
+            tr.appendChild(populationTd);
+            tr.appendChild(areaTd);
+            tr.appendChild(densityTd);
+            tr.appendChild(regionTd);
+            tr.appendChild(flagTd);
+
+            // ajouter la ligne au corps de la table
+            tableBody.appendChild(tr);
+        }
+    </script>
+      </body>
 </html>
