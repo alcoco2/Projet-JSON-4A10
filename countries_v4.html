@@ -4,12 +4,74 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        table, th, td {border: 1px solid black}
+    <script src="countries.js"></script>
+    <script lang="text/typescript" src="Currency.js"></script>
+    <title>Countries V4</title>
+	<style>
+        /* Style pour la zone de détail */
+        #detail-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: none;
+            z-index: 1;
+        }
+
+        #detail-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            width: 80%;
+            max-width: 600px;
+            max-height: 80%;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+		#flag-modal {
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			z-index: 2;
+			background-color: white;
+			border: 1px solid black;
+			padding: 20px;
+			display: none;
+			}
+
+			#flag-modal img {
+			max-width: 80vw;
+			max-height: 80vh;
+			}
     </style>
-    <title>Document</title>
 </head>
-<body>
+	<div>
+		<div>
+			<label for="continent-filter">Continent :</label>
+			<select id="continent-filter">
+			<option value="">-- Sélectionnez un continent --</option>
+			<!-- options ajoutées dynamiquement avec JavaScript -->
+			</select>
+		</div>
+		<div>
+			<label for="language-filter">Langue :</label>
+			<select id="language-filter">
+			<option value="">-- Sélectionnez une langue --</option>
+			<!-- options ajoutées dynamiquement avec JavaScript -->
+			</select>
+		</div>
+		<div>
+			<label for="text-filter">Rechercher un pays :</label>
+			<input type="text" id="search" placeholder="Tape un truc">
+		</div>
+		<button id="search-btn">Clique ici, c'est magique</button>
+	</div>
     <table>
         <thead>
             <tr>
@@ -21,17 +83,194 @@
                 <th>Drapeau</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td>test</td>
-                <td>test</td>
-                <td>test</td>
-                <td>test</td>
-                <td>test</td>
-                <td>test</td>
-            </tr>
+        <tbody id="table-body">
         </tbody>
     </table>
-    
-</body>
+    <!-- Zone de détail -->
+	<div id="detail-container">
+        <div id="detail-content">
+            <h2 id="detail-name"></h2>
+            <img id="detail-flag" width="200" alt="">
+            <p><strong>Population:</strong> <span id="detail-population"></span></p>
+            <p><strong>Surface:</strong> <span id="detail-area"></span></p>
+            <p><strong>Densité de population:</strong> <span id="detail-density"></span></p>
+            <p><strong>Continent d'appartenance:</strong> <span id="detail-region"></span></p>
+            <button id="close-button">Fermer</button>
+        </div>
+    </div>
+	<div class="detail-container">
+		<div id="flag-modal">
+			<img id="flag-modal-image" src="" alt="">
+		</div>
+	</div>
+    <div>
+        <button id="prev-button" disabled>PREC</button>
+        <span id="page-number"></span>
+        <button id="next-button">SUIV</button>
+    </div>
+    <script>
+// récupérer le corps de la table
+const tableBody = document.getElementById('table-body');
+const prevButton = document.getElementById('prev-button');
+const pageNumber = document.getElementById('page-number');
+const nextButton = document.getElementById('next-button');
+let currentPage = sessionStorage.getItem('currentPage');
+
+// Vérifier si la valeur récupérée est null
+if (currentPage === null) {
+  currentPage = 1;
+}
+
+const rowsPerPage = 25;
+const totalPages = Math.ceil(countries.length / rowsPerPage);
+
+// Récupérer le select du filtre de langue
+const languageFilterSelect = document.getElementById('language-filter');
+
+// Créer un Set pour stocker les langues uniques
+const uniqueLanguages = new Set();
+
+// Parcourir chaque pays dans la liste des pays
+countries.forEach(function(country) {
+  // Parcourir chaque langue parlée dans le pays
+  country.languages.forEach(function(language) {
+    // Ajouter la langue au Set si elle n'y est pas déjà
+    if (!uniqueLanguages.has(language.name)) {
+      uniqueLanguages.add(language.name);
+
+      // Créer une nouvelle option pour cette langue
+      const option = document.createElement('option');
+      option.value = language.name;
+      option.text = language.name;
+
+      // Ajouter l'option au select
+      languageFilterSelect.appendChild(option);
+    }
+  }); // ajout de l'accolade fermante manquante
+});
+
+
+  // Récupération de tous les continents uniques à partir de l'attribut 'region'
+  const continents = [...new Set(countries.map(country => country.region))];
+
+  // Ajout des options de continent dans le filtre de continent
+  const continentFilterSelect = document.querySelector('#continent-filter');
+  continents.forEach(continent => {
+    const option = document.createElement('option');
+    option.value = continent;
+    option.text = continent;
+    continentFilterSelect.appendChild(option);
+  });
+
+  // Sélection de l'élément HTML du bouton "Rechercher"
+  const searchBtn = document.getElementById('search-btn');
+  const searchInput = document.getElementById('search');
+  const languageFilter = document.getElementById('language-filter');
+
+  // Ajout d'un gestionnaire d'événement click sur le bouton "Rechercher"
+  searchBtn.addEventListener('click', function() {
+    // Récupération de la valeur des filtres
+    const selectedContinent = continentFilterSelect.value;
+    const selectedLanguage = languageFilter.value;
+    const searchText = searchInput.value;
+
+    // Filtrage des pays correspondant aux critères de filtres sélectionnés
+    const filteredCountries = countries.filter(function(country) {
+      if (selectedContinent && selectedContinent !== country.region) {
+        return false;
+      }
+      if (selectedLanguage && !country.languages.some(lang => lang.name === selectedLanguage)) {
+        return false;
+      }
+      if (searchText && !country.name.toLowerCase().includes(searchText.toLowerCase())) {
+        return false;
+      }
+      return true;
+    });
+
+    // Mise à jour du tableau avec les résultats de recherche
+    currentPage = 1;
+    updateTable(filteredCountries);
+  });
+
+
+	function updateTable(filteredCountries) {
+		sessionStorage.setItem('currentPage', currentPage);
+		tableBody.innerHTML = '';
+		for (let i = (currentPage - 1) * rowsPerPage; i < currentPage * rowsPerPage && i < countries.length; i++) {
+			const country = countries[i];
+			const tr = document.createElement('tr');
+			const nameTd = document.createElement('td');
+			nameTd.textContent = country.translations.fr;
+			const populationTd = document.createElement('td');
+			populationTd.textContent = country.population;
+			const areaTd = document.createElement('td');
+			areaTd.textContent = country.area;
+			const densityTd = document.createElement('td');
+			densityTd.textContent = (country.population / country.area).toFixed(2);
+			const regionTd = document.createElement('td');
+			regionTd.textContent = country.region;
+			const flagTd = document.createElement('td');
+			const flagImg = document.createElement('img');
+			flagImg.src = country.flag;
+			flagImg.alt = country.name;
+			flagImg.width = 50;
+			flagTd.appendChild(flagImg);
+			tr.appendChild(nameTd);
+			tr.appendChild(populationTd);
+			tr.appendChild(areaTd);
+			tr.appendChild(densityTd);
+			tr.appendChild(regionTd);
+			tr.appendChild(flagTd);
+			tr.setAttribute('data-country', JSON.stringify(country));
+			tr.addEventListener('click', showDetails);
+			tableBody.appendChild(tr);
+		}
+		pageNumber.textContent = currentPage + ' / ' + totalPages;
+		prevButton.disabled = currentPage === 1;
+		nextButton.disabled = currentPage === totalPages;
+	}
+
+	function showDetails(event) {
+			let country = JSON.parse(event.currentTarget.getAttribute('data-country'));
+			let detailContainer = document.getElementById('detail-container');
+			let nameH2 = document.getElementById('detail-name');
+			nameH2.textContent = country.translations.fr;
+			let populationSpan = document.getElementById('detail-population');
+			populationSpan.textContent = country.population;
+			let areaSpan = document.getElementById('detail-area');
+			areaSpan.textContent = country.area;
+			let densitySpan = document.getElementById('detail-density');
+			densitySpan.textContent = (country.population / country.area).toFixed(2);
+			let regionSpan = document.getElementById('detail-region');
+			regionSpan.textContent = country.region;
+			let flagImg = document.getElementById('detail-flag');
+			flagImg.src = country.flag;
+			flagImg.alt = country.name;
+			detailContainer.style.display = 'block';
+			let closeButton = document.getElementById('close-button');
+			closeButton.addEventListener('click', function() {
+				detailContainer.style.display = 'none';
+			});
+		}
+
+		function hideDetails() {
+		let detailsDiv = document.getElementById('details');
+		detailsDiv.style.display = 'none';
+		}
+
+		prevButton.addEventListener('click', () => {
+		currentPage--;
+		updateTable();
+		});
+
+		nextButton.addEventListener('click', () => {
+			currentPage++;
+			updateTable();
+		});
+
+
+        updateTable();
+    </script>
+      </body>
 </html>
