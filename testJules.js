@@ -1,5 +1,8 @@
 const countries = Country.all_countries;
 
+/**
+ * Pays avec au moins un voisin ayant la meme langue. bi-check
+ */
 function withCommonLanguage() {
     let countriesWithLanguage = [];
 
@@ -29,11 +32,10 @@ function withCommonLanguage() {
             countriesWithLanguage.push(country);
         }
     }
-    
+
     return countriesWithLanguage;
 }
 
-console.log(withCommonLanguage());
 
 
 /**
