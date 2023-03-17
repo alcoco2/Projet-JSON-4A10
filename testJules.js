@@ -1,26 +1,40 @@
 const countries = Country.all_countries;
-/**
- * Pays ayant au moins un voisin parlant l’une des es langues. A chez aussi les pays voisins et les langues en question.
- */
+
 function withCommonLanguage() {
     let countriesWithLanguage = [];
-    
+
     for (let country of countries) {
+        let hasCommonLanguage = false;
+
         for (let neighbor of country.codeAlpha3.getBorders()) {
-            if (neighbor.codeAlpha3.languages.length) {
-                for (let langue of neighbor.codeAlpha3.languages) {
-                    let commonLanguage = country.codeAlpha3.getLanguages().filter(lang => lang.iso639_2 == langue.iso639_2)
-                    if (commonLanguage) {
-                        countriesWithLanguage.push(country);
+            for (let neighborLanguage of neighbor.codeAlpha3.languages) {
+                for (let countryLanguage of country.codeAlpha3.getLanguages()) {
+                    if (neighborLanguage.iso639_2 === countryLanguage.iso639_2) {
+                        hasCommonLanguage = true;
+                        break;
                     }
                 }
+
+                if (hasCommonLanguage) {
+                    break;
+                }
+            }
+
+            if (hasCommonLanguage) {
+                break;
             }
         }
-    }
 
-    return countriesWithLanguage.filter((x, i) => countriesWithLanguage.indexOf(x) === i);
+        if (hasCommonLanguage) {
+            countriesWithLanguage.push(country);
+        }
+    }
+    
+    return countriesWithLanguage;
 }
-console.log(withCommonLanguage())
+
+console.log(withCommonLanguage());
+
 
 /**
  * Pays sans aucun voisin ayant au moins une de ses monnaies. bi-check
