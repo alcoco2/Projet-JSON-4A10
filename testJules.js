@@ -93,3 +93,55 @@ function moreTopLevelDomains() {
 //     Exemple : France -> Espagne -> Portugal.
 // Q9 - Compléments :●En guise de test vous ajouterez un appel à la fonction veryLongTrip(nom_pays) en utilisant France comme argument.
 //● Essayez de trouver un exemple de pays depuis lequel on peut ainsi visiter le plus de pays. Vous ajouterez aussi un appel à la fonction veryLongTrip(nom_pays) en utilisant ce pays comme argument
+// -> France 135
+// -> antartique 1
+
+
+/**
+ * Recherche et retourne l'objet Country a partir du nom ou du code du pays
+ * 
+ * @param {String} info 
+ * @param {String} type 
+ * @returns {Objet} Country
+ */
+function getPays(info, type){
+    for (let country of countries) {
+        if (type == "code") {
+            if (country.codeAlpha3.codeAlpha3 == info) {
+                return country.codeAlpha3
+            }
+        }
+        if (type == "nom") {
+            if (country.codeAlpha3.nom == info) {
+                return country.codeAlpha3
+            }
+        }
+
+    }
+}
+
+
+function veryLongTrip(nom_pays){
+    let visitCountries = [];
+    let pays = getPays(nom_pays,"nom")
+    
+    for (let neighbor of pays.paysFrontaliers) {
+        console.log(neighbor)
+    }
+    // let tabCommonCurrency = []
+    // for (let neighbor of country.codeAlpha3.getBorders()) {
+    //     if (neighbor.codeAlpha3.currencies.length) {
+    //         for (let cuurency of neighbor.codeAlpha3.currencies) {
+    //             let commonCurrency = country.codeAlpha3.getCurrencies().filter(curr => curr.code !== cuurency.code)
+    //             tabCommonCurrency.push(commonCurrency)
+    //         }
+    //     }
+    // }
+    // if (!tabCommonCurrency.length) {
+    //     countriesWithSameCurrency.push(country);
+    // }
+
+    // return countriesWithSameCurrency.filter((x, i) => countriesWithSameCurrency.indexOf(x) === i);
+}
+
+veryLongTrip("France")
