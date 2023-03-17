@@ -20,7 +20,9 @@ console.log(outsideTheContinent())
 outsideTheContinent();
 
 
-
+/**
+ * Affiche les pays qui ont le plus de voisin et affiche les voisins
+*/
 function moreNeighbors(){
     let paysAvecVoisinsNombreux = []
     let paysActuel = 0
@@ -43,6 +45,11 @@ function moreNeighbors(){
 console.log(moreNeighbors())
 moreNeighbors();
 
+
+
+/**
+ * Affiche les pays qui n'ont pas de voisins
+*/
 function lessNeighbors(){
     let paysSansVoisins = []
     for (let country of countries) {
@@ -59,6 +66,10 @@ lessNeighbors();
 
 
 
+
+/**
+ * Affiche les pays qui parle le plus de langues différentes et affiche les langues parler
+*/
 function moreLanguages(){
     let paysAveclanguesNombreuses = []
     let paysActuel = 0
