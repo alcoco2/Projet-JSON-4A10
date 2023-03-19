@@ -2,22 +2,16 @@ const countries = Country.all_countries;
 /**
  * Affiche les pays qui ont un frontalier hors de leur continent.
 */
-function outsideTheContinent(){
-    let tabNotSameRegion = []
-    for (let country of countries) {
-        let paysVoisin = country.codeAlpha3.getBorders();
-        for (let voisin of paysVoisin) {
-            if (country.codeAlpha3.continent !== voisin.codeAlpha3.continent) {
-                tabNotSameRegion.push(country.codeAlpha3)
-                break;
-            }
-        }
+function outsideTheContinent() {
+    let tabNotSameRegion = [];
+    for (const country of countries) {
+      const paysVoisin = country.codeAlpha3.getBorders();
+      if (paysVoisin.some((voisin) => country.codeAlpha3.continent !== voisin.codeAlpha3.continent)) {
+        tabNotSameRegion.push(country.codeAlpha3);
+      }
     }
     return tabNotSameRegion
 }
-
-
-
 
 /**
  * Affiche les pays qui ont le plus de voisin et affiche les voisins
@@ -45,27 +39,18 @@ function moreNeighbors(){
     return paysAvecVoisinsNombreux, paysAvecVoisinsNombreuxNom
 }
 
-
-
-
 /**
  * Affiche les pays qui n'ont pas de voisins
 */
-function lessNeighbors(){
+function lessNeighbors() {
     let paysSansVoisins = []
     for (let country of countries) {
-        let paysVoisin = country.codeAlpha3.getBorders();
-        if (paysVoisin.length == 0) {
-            paysSansVoisins.push(paysVoisin)
+        if (!country.codeAlpha3.getBorders().length) {
+            paysSansVoisins.push(country.codeAlpha3)
         }
     }
     return paysSansVoisins
 }
-
-
-
-
-
 
 /**
  * Affiche les pays qui parle le plus de langues différentes et affiche les langues parler
@@ -93,9 +78,8 @@ function moreLanguages(){
     return paysAveclanguesNombreuses, paysAveclanguesNombreusesNom
 }
 
-
 /**
- * Pays avec au moins un voisin ayant la meme langue. bi-check
+ * Pays avec au moins un voisin ayant la meme langue.
  */
 function withCommonLanguage() {
     let countriesWithLanguage = [];
@@ -133,7 +117,7 @@ function withCommonLanguage() {
 
 
 /**
- * Pays sans aucun voisin ayant au moins une de ses monnaies. bi-check
+ * Pays sans aucun voisin ayant au moins une de ses monnaies.
  */
 function withoutCommonCurrency() {
     let countriesWithSameCurrency = [];
@@ -157,7 +141,7 @@ function withoutCommonCurrency() {
 }
 
 /**
- * Pays triés par ordre décroissant de densité de population. bi-check
+ * Pays triés par ordre décroissant de densité de population.
 */
 function sortingDecreasingDensity() {
     let sortCountries = Country.all_countries;
@@ -169,7 +153,7 @@ function sortingDecreasingDensity() {
 }
 
 /**
- * Pays ayant plusieurs Top Level Domains Internet. bi-check
+ * Pays ayant plusieurs Top Level Domains Internet.
  */
 function moreTopLevelDomains() {
     let countryMoreTDL = [];
@@ -181,8 +165,6 @@ function moreTopLevelDomains() {
     }
     return countryMoreTDL
 }
-
-// -> antartique 1
 
 /**
  * Recherche et retourne l'objet Country a partir du nom ou du code du pays
