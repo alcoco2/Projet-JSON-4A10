@@ -157,8 +157,8 @@ function sortingDecreasingDensity() {
  */
 function moreTopLevelDomains() {
     let countryMoreTDL = [];
-    for(let country of countries){
-        let tld = country.codeAlpha3.tld;
+    for(const country of countries){
+        const tld = country.codeAlpha3.tld;
         if (tld.length > 1) {
             countryMoreTDL.push(country.codeAlpha3);
         }
