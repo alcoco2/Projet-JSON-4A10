@@ -197,7 +197,7 @@ function getPays(info, type){
 function veryLongTrip(nom_pays, frontalier = []) {
     let pays = getPays(nom_pays, "nom");
 
-    if (Object.keys(pays.paysFrontaliers)) {
+    if (typeof pays.paysFrontaliers != 'undefined'){
         for (let neighbor of pays.paysFrontaliers) {
           let nameNeighbor = getPays(neighbor, "code");
           if (!frontalier.includes(nameNeighbor.nom)) {
@@ -207,9 +207,9 @@ function veryLongTrip(nom_pays, frontalier = []) {
             }
           }
         }
+    } else {
+        frontalier.push(pays);
     }
   
     return frontalier;
-  }
-
-console.log(veryLongTrip("Antarctica"))
+}

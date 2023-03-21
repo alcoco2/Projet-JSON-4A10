@@ -143,5 +143,3 @@ function veryLongTrip(nom_pays){
 
     // return countriesWithSameCurrency.filter((x, i) => countriesWithSameCurrency.indexOf(x) === i);
 }
-
-veryLongTrip("France")
