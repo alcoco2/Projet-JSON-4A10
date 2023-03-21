@@ -124,10 +124,10 @@ function withoutCommonCurrency() {
     
     for (let country of countries) {
         let tabCommonCurrency = []
-        for (let neighbor of country.codeAlpha3.getBorders()) {
+        for (const neighbor of country.codeAlpha3.getBorders()) {
             if (neighbor.codeAlpha3.currencies.length) {
-                for (let cuurency of neighbor.codeAlpha3.currencies) {
-                    let commonCurrency = country.codeAlpha3.getCurrencies().filter(curr => curr.code !== cuurency.code)
+                for (const cuurency of neighbor.codeAlpha3.currencies) {
+                    const commonCurrency = country.codeAlpha3.getCurrencies().filter(curr => curr.code !== cuurency.code)
                     tabCommonCurrency.push(commonCurrency)
                 }
             }
@@ -139,6 +139,7 @@ function withoutCommonCurrency() {
 
     return countriesWithSameCurrency.filter((x, i) => countriesWithSameCurrency.indexOf(x) === i);
 }
+console.log(withoutCommonCurrency())
 
 /**
  * Pays triés par ordre décroissant de densité de population.
