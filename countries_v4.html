@@ -230,6 +230,10 @@ countries.forEach(function(country) {
         tr.addEventListener('click', showDetails);
         tableBody.appendChild(tr);
       }
+      let totalPagesNumber = Math.ceil(filteredCountriesExploit.length / rowsPerPage);
+      pageNumber.textContent = currentPage + ' / ' + totalPagesNumber;
+		  prevButton.disabled = currentPage === 1;
+		  nextButton.disabled = currentPage === totalPagesNumber;
     } else {
       for (let i = (currentPage - 1) * rowsPerPage; i < currentPage * rowsPerPage && i < countries.length; i++) {
         const country = countries[i];
@@ -260,10 +264,10 @@ countries.forEach(function(country) {
         tr.addEventListener('click', showDetails);
         tableBody.appendChild(tr);
       }
+      pageNumber.textContent = currentPage + ' / ' + totalPages;
+      prevButton.disabled = currentPage === 1;
+      nextButton.disabled = currentPage === totalPages;
     }
-		pageNumber.textContent = currentPage + ' / ' + totalPages;
-		prevButton.disabled = currentPage === 1;
-		nextButton.disabled = currentPage === totalPages;
 	}
 
 	function showDetails(event) {
