@@ -197,35 +197,67 @@ countries.forEach(function(country) {
 	function updateTable(filteredCountries) {
 		sessionStorage.setItem('currentPage', currentPage);
 		tableBody.innerHTML = '';
-		for (let i = (currentPage - 1) * rowsPerPage; i < currentPage * rowsPerPage && i < countries.length; i++) {
-			const country = countries[i];
-			const tr = document.createElement('tr');
-			const nameTd = document.createElement('td');
-			nameTd.textContent = country.translations.fr;
-			const populationTd = document.createElement('td');
-			populationTd.textContent = country.population;
-			const areaTd = document.createElement('td');
-			areaTd.textContent = country.area;
-			const densityTd = document.createElement('td');
-			densityTd.textContent = (country.population / country.area).toFixed(2);
-			const regionTd = document.createElement('td');
-			regionTd.textContent = country.region;
-			const flagTd = document.createElement('td');
-			const flagImg = document.createElement('img');
-			flagImg.src = country.flag;
-			flagImg.alt = country.name;
-			flagImg.width = 50;
-			flagTd.appendChild(flagImg);
-			tr.appendChild(nameTd);
-			tr.appendChild(populationTd);
-			tr.appendChild(areaTd);
-			tr.appendChild(densityTd);
-			tr.appendChild(regionTd);
-			tr.appendChild(flagTd);
-			tr.setAttribute('data-country', JSON.stringify(country));
-			tr.addEventListener('click', showDetails);
-			tableBody.appendChild(tr);
-		}
+    if (filteredCountries) {
+      for (let i = (currentPage - 1) * rowsPerPage; i < currentPage * rowsPerPage && i < filteredCountries.length; i++) {
+        const country = filteredCountries[i];
+        const tr = document.createElement('tr');
+        const nameTd = document.createElement('td');
+        nameTd.textContent = country.translations.fr;
+        const populationTd = document.createElement('td');
+        populationTd.textContent = country.population;
+        const areaTd = document.createElement('td');
+        areaTd.textContent = country.area;
+        const densityTd = document.createElement('td');
+        densityTd.textContent = (country.population / country.area).toFixed(2);
+        const regionTd = document.createElement('td');
+        regionTd.textContent = country.region;
+        const flagTd = document.createElement('td');
+        const flagImg = document.createElement('img');
+        flagImg.src = country.flag;
+        flagImg.alt = country.name;
+        flagImg.width = 50;
+        flagTd.appendChild(flagImg);
+        tr.appendChild(nameTd);
+        tr.appendChild(populationTd);
+        tr.appendChild(areaTd);
+        tr.appendChild(densityTd);
+        tr.appendChild(regionTd);
+        tr.appendChild(flagTd);
+        tr.setAttribute('data-country', JSON.stringify(country));
+        tr.addEventListener('click', showDetails);
+        tableBody.appendChild(tr);
+      }
+    } else {
+      for (let i = (currentPage - 1) * rowsPerPage; i < currentPage * rowsPerPage && i < countries.length; i++) {
+        const country = countries[i];
+        const tr = document.createElement('tr');
+        const nameTd = document.createElement('td');
+        nameTd.textContent = country.translations.fr;
+        const populationTd = document.createElement('td');
+        populationTd.textContent = country.population;
+        const areaTd = document.createElement('td');
+        areaTd.textContent = country.area;
+        const densityTd = document.createElement('td');
+        densityTd.textContent = (country.population / country.area).toFixed(2);
+        const regionTd = document.createElement('td');
+        regionTd.textContent = country.region;
+        const flagTd = document.createElement('td');
+        const flagImg = document.createElement('img');
+        flagImg.src = country.flag;
+        flagImg.alt = country.name;
+        flagImg.width = 50;
+        flagTd.appendChild(flagImg);
+        tr.appendChild(nameTd);
+        tr.appendChild(populationTd);
+        tr.appendChild(areaTd);
+        tr.appendChild(densityTd);
+        tr.appendChild(regionTd);
+        tr.appendChild(flagTd);
+        tr.setAttribute('data-country', JSON.stringify(country));
+        tr.addEventListener('click', showDetails);
+        tableBody.appendChild(tr);
+      }
+    }
 		pageNumber.textContent = currentPage + ' / ' + totalPages;
 		prevButton.disabled = currentPage === 1;
 		nextButton.disabled = currentPage === totalPages;
