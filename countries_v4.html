@@ -167,6 +167,8 @@ countries.forEach(function(country) {
   const searchInput = document.getElementById('search');
   const languageFilter = document.getElementById('language-filter');
 
+  let filteredCountriesExploit;
+
   // Ajout d'un gestionnaire d'événement click sur le bouton "Rechercher"
   searchBtn.addEventListener('click', function() {
     // Récupération de la valeur des filtres
@@ -189,17 +191,18 @@ countries.forEach(function(country) {
     });
 
     // Mise à jour du tableau avec les résultats de recherche
+    filteredCountriesExploit = filteredCountries
     currentPage = 1;
-    updateTable(filteredCountries);
+    updateTable();
   });
 
 
-	function updateTable(filteredCountries) {
+	function updateTable() {
 		sessionStorage.setItem('currentPage', currentPage);
 		tableBody.innerHTML = '';
-    if (filteredCountries) {
-      for (let i = (currentPage - 1) * rowsPerPage; i < currentPage * rowsPerPage && i < filteredCountries.length; i++) {
-        const country = filteredCountries[i];
+    if (filteredCountriesExploit) {
+      for (let i = (currentPage - 1) * rowsPerPage; i < currentPage * rowsPerPage && i < filteredCountriesExploit.length; i++) {
+        const country = filteredCountriesExploit[i];
         const tr = document.createElement('tr');
         const nameTd = document.createElement('td');
         nameTd.textContent = country.translations.fr;
